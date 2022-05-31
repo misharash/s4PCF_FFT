@@ -41,7 +41,7 @@ if rsd:
     savedir = savedir+"_rsd"
 
 # load the galaxy and pair data
-print "Loading pair/galaxy catalogs...", whichsim
+print("Loading pair/galaxy catalogs...", whichsim)
 pos_full = np.fromfile(savedir+"/halos_gal_full_pos_"+str(whichsim))
 pair_data = np.fromfile(savedir+"/halos_pairs_full_"+str(whichsim)+"_maxdist"+str(int(params['maxdist'])))
 pos_full = np.array(np.reshape(pos_full, (-1, 3))) / params['Lbox'] - 0.5 # relative unit

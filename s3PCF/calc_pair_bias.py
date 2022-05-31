@@ -214,13 +214,13 @@ def gal_convolve_W(gal_grid, W_fft, params, saveout = False):
     """
 
     # do convolution by explict ffts
-    print "Starting Convolution (manual)..."
+    print("Starting Convolution (manual)...")
     start = time.time()
 
     gal_fft = np.fft.rfftn(gal_grid)
 
     gal_grid_convolved = np.fft.irfftn(gal_fft*W_fft, gal_grid.shape)
-    print "Convolution done, time elapsed: ", time.time() - start
+    print("Convolution done, time elapsed: ", time.time() - start)
 
     # save the convolved fields
     if saveout:
@@ -261,13 +261,13 @@ def pair_convolve_W(pair_grid, W_fft, params, saveout = False):
     """
 
     # do convolution by explict ffts
-    print "Starting Convolution (manual)..."
+    print("Starting Convolution (manual)...")
     start = time.time()
 
     pair_fft = np.fft.rfftn(pair_grid)
 
     pair_grid_convolved = np.fft.irfftn(pair_fft*W_fft, pair_grid.shape)
-    print "Convolution done, time elapsed: ", time.time() - start
+    print("Convolution done, time elapsed: ", time.time() - start)
 
     # save the convolved fields
     if saveout:
@@ -383,7 +383,7 @@ def calc_qeff(whichsim, pos_full, pair_data, params,
     """
 
     # pos_ful has to be three columns in Mpc, from 0 to L_box
-    print "Calculating bias. Realization: ", whichsim
+    print("Calculating bias. Realization: ", whichsim)
 
     # convert to box units from -0.5 to 0.5
     pos_pairs = pair_data[:,0:3] / params['Lbox'] - 0.5
@@ -397,7 +397,7 @@ def calc_qeff(whichsim, pos_full, pair_data, params,
     Ngals = len(pos_full)
 
     # calculate window function and its fft
-    print "Setting up window function and its fft..."
+    print("Setting up window function and its fft...")
     start = time.time()
     # check for window function directory
     wdir = "./windows"
@@ -406,12 +406,12 @@ def calc_qeff(whichsim, pos_full, pair_data, params,
     if not os.path.exists(wdir):
         os.makedirs(wdir)
     wfft_filename = wdir+"/wfft"
-    print os.path.isfile(wfft_filename+".npy")
+    print(os.path.isfile(wfft_filename+".npy"))
     # if file doesnt exist, calculate the fft, but if it does, just load file
     if os.path.isfile(wfft_filename+".npy"):
         W_fft = np.load(wfft_filename+".npy")
     else:
-        print "building window function and its FFT"
+        print("building window function and its FFT")
         W_grid = window_gauss_sigmoid(x_grid, y_grid, z_grid, params, rsd)
         # normalize window function
         W_grid_norm = W_grid/np.sum(W_grid)
@@ -419,19 +419,19 @@ def calc_qeff(whichsim, pos_full, pair_data, params,
         W_fft = np.fft.rfftn(W_grid_norm)
         np.save(wfft_filename, W_fft)
 
-    print "Time elapsed: ", time.time() - start
+    print("Time elapsed: ", time.time() - start)
     
     # convolve the post tsc grid with the window function
     gal_grid_convolved, gal_fft = gal_convolve_W(gal_grid, W_fft, params)
 
-    print "Calculating galaxy bias..."
+    print("Calculating galaxy bias...")
     # calculating overdensity fields
     rho_gal_avg = np.mean(gal_grid_convolved)
     delta_gal = (gal_grid_convolved - rho_gal_avg)/rho_gal_avg
 
     # weighted average of the galaxy overdensity field
     b_gals = np.sum(delta_gal*gal_grid)/np.sum(gal_grid)
-    print "b_gals = ", b_gals
+    print("b_gals = ", b_gals)
 
     # create bins for dist_los and dist_trans
     bins_los = np.linspace(0,params['maxdist']/params['Lbox'],
@@ -494,7 +494,7 @@ def calc_qeff(whichsim, pos_full, pair_data, params,
                 galcorr_dw = 0.104
             else:
                 galcorr_dw = 0
-                print "galcorr_dw is unknown for this maxdist."
+                print("galcorr_dw is unknown for this maxdist.")
 
             # compute the Qeff
             Qeff = ((1+gal_corr)*bpg - 2 - galcorr_dw/(2*gal_corr))/\

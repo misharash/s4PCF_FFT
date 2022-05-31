@@ -110,12 +110,12 @@ def CalculateTSC(positions, gridsize, boxsize, weights=None, projected=False, dt
         rotate_to = rotate_to.as_type(np.float64)
 
     if verbose:
-        print 'Starting TSC...'
+        print('Starting TSC...')
     # get the density weighted field grid
     for p,w,NP in izip(positions,weights,NPs):
         lib.do_tsc(Tools.cpointer(p), Tools.cpointer(w), Tools.cpointer(fielddensity), ct.c_uint64(NP), ct.c_uint64(gridsize), ct.c_double(boxsize), Tools.cpointer(rotate_to), ct.c_int(projected), ct.c_int(0))
     if verbose:
-        print '\tDone.'
+        print('\tDone.')
         #print 'Starting FFT and radial binning...'
     """
     # Do the FFT
